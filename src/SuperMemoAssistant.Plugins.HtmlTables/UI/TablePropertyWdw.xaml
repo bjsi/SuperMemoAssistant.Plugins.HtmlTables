@@ -5,8 +5,205 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SuperMemoAssistant.Plugins.HtmlTables.UI"
         mc:Ignorable="d"
-        Title="TablePropertyWdw" Height="450" Width="800">
+        Title="HTML Table Editor" Height="530" Width="300">
     <Grid>
-        
+      <Grid.RowDefinitions>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+      </Grid.RowDefinitions>
+      
+      <!-- Caption -->
+      <DockPanel Grid.Row="0">
+        <TextBlock Text="Table Caption: "
+                   VerticalAlignment="Center"
+                   Margin="5"
+                   FontWeight="Bold"
+                     />
+        <TextBox Name="TableCaptionBox"
+                 VerticalAlignment="Center"
+                 Margin="5"
+                 Text="{Binding TableCaption}"
+                 FontWeight="Bold"/>
+      </DockPanel>
+      
+      <!-- Caption Alignment Radio Group -->
+    <StackPanel Orientation="Vertical"
+                Grid.Row="1">
+      <TextBlock Text="Caption Alignment: "
+                   VerticalAlignment="Center"
+                   Margin="5"
+                   FontWeight="Bold" />
+      <DockPanel>
+        <RadioButton Content="Default"
+                     GroupName="CaptionAlignmentRadioGroup"
+                     Margin="5"/>
+        <RadioButton Content="Left"
+                     GroupName="CaptionAlignmentRadioGroup"
+                     Margin="5" />
+        <RadioButton Content="Center"
+                     GroupName="CaptionAlignmentRadioGroup"
+                     Margin="5"/>
+        <RadioButton Content="Right"
+                     GroupName="CaptionAlignmentRadioGroup"
+                     Margin="5" />
+      </DockPanel>
+      
+    </StackPanel>
+      
+      <!-- Caption Location -->
+    <StackPanel Orientation="Vertical"
+                Grid.Row="2">
+      <TextBlock Text="Table Caption Location: "
+                   VerticalAlignment="Center"
+                   Margin="5"
+                   FontWeight="Bold" />
+
+      <DockPanel>
+        <RadioButton Content="Default"
+                     GroupName="CaptionAlignmentRadioGroup"
+                     Margin="5"/>
+        <RadioButton Content="Top"
+                     GroupName="CaptionAlignmentRadioGroup"
+                     Margin="5" />
+        <RadioButton Content="Bottom"
+                     GroupName="CaptionAlignmentRadioGroup"
+                     Margin="5"/>
+      </DockPanel>
+    </StackPanel>
+      
+      <!-- Border Size -->
+      <DockPanel Grid.Row="3">
+        <TextBlock Text="Border Size: "
+                   VerticalAlignment="Center"
+                   Margin="5"
+                   FontWeight="Bold"
+                     />
+        <TextBox Name="BorderSizeBox"
+                 VerticalAlignment="Center"
+                 Margin="5"
+                 Text="{Binding BorderSize}"
+                 FontWeight="Bold"/>
+      </DockPanel>
+      
+      <!-- Table Alignment -->
+    <StackPanel Orientation="Vertical"
+                Grid.Row="4">
+      <TextBlock Text="Table Alignment: "
+                   VerticalAlignment="Center"
+                   Margin="5"
+                   FontWeight="Bold" />
+
+      <DockPanel>
+        <RadioButton Content="Default"
+                     GroupName="TableAlignmentRadioGroup"
+                     Margin="5"/>
+        <RadioButton Content="Left"
+                     GroupName="TableAlignmentRadioGroup"
+                     Margin="5" />
+        <RadioButton Content="Center"
+                     GroupName="TableAlignmentRadioGroup"
+                     Margin="5"/>
+        <RadioButton Content="Right"
+                     GroupName="TableAlignmentRadioGroup"
+                     Margin="5"/>
+      </DockPanel>
+    </StackPanel>
+      
+      <!-- Table Rows -->
+      <DockPanel Grid.Row="5">
+        <TextBlock Text="Table Rows: "
+                   VerticalAlignment="Center"
+                   Margin="5"
+                   FontWeight="Bold"
+                     />
+        <TextBox Name="TableRowsBox"
+                 VerticalAlignment="Center"
+                 Margin="5"
+                 Text="{Binding TableRows}"
+                 FontWeight="Bold"/>
+      </DockPanel>
+      
+      <!-- Table Columns -->
+      <DockPanel Grid.Row="6">
+        <TextBlock Text="Table Columns: "
+                   VerticalAlignment="Center"
+                   Margin="5"
+                   FontWeight="Bold"
+                     />
+        <TextBox Name="TableColumnsBox"
+                 VerticalAlignment="Center"
+                 Margin="5"
+                 Text="{Binding TableColumns}"
+                 FontWeight="Bold"/>
+      </DockPanel>
+      
+      <!-- Table Width -->
+      <DockPanel Grid.Row="7">
+        <TextBlock Text="Table Width: "
+                   VerticalAlignment="Center"
+                   Margin="5"
+                   FontWeight="Bold"
+                     />
+        <TextBox Name="TableWidthBox"
+                 VerticalAlignment="Center"
+                 Margin="5"
+                 Text="{Binding TableWidth}"
+                 FontWeight="Bold"/>
+      </DockPanel>
+      
+      <!-- Table Width Measurement -->
+    <StackPanel Orientation="Vertical"
+                Grid.Row="8">
+      <TextBlock Text="Width Measurement: "
+                   VerticalAlignment="Center"
+                   Margin="5"
+                   FontWeight="Bold" />
+
+      <DockPanel>
+        <RadioButton Content="Pixel"
+                     GroupName="TableAlignmentRadioGroup"
+                     Margin="5"/>
+        <RadioButton Content="Percent"
+                     GroupName="TableAlignmentRadioGroup"
+                     Margin="5" />
+      </DockPanel>
+    </StackPanel>
+      
+      <!-- Cell Padding -->
+      <DockPanel Grid.Row="9">
+        <TextBlock Text="Cell Padding: "
+                   VerticalAlignment="Center"
+                   Margin="5"
+                   FontWeight="Bold"
+                     />
+        <TextBox Name="CellPaddingBox"
+                 VerticalAlignment="Center"
+                 Margin="5"
+                 Text="{Binding CellPadding}"
+                 FontWeight="Bold"/>
+      </DockPanel>
+      
+      <!-- Cell Spacing -->
+      <DockPanel Grid.Row="10">
+        <TextBlock Text="Cell Spacing: "
+                   VerticalAlignment="Center"
+                   Margin="5"
+                   FontWeight="Bold"
+                     />
+        <TextBox Name="CellSpacingBox"
+                 VerticalAlignment="Center"
+                 Margin="5"
+                 Text="{Binding CellSpacing}"
+                 FontWeight="Bold"/>
+      </DockPanel>
     </Grid>
 </Window>
