@@ -100,10 +100,10 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
         return;
 
       if (Config.AddDeleteRowMenuItem)
-        svc.AddMenuItem(Name, "Delete Table Row", new ActionProxy(TableDeleteRow));
+        svc.AddMenuItem(Name, "Delete Row", new ActionProxy(TableDeleteRow));
 
       if (Config.AddInsertRowMenuItem)
-        svc.AddMenuItem(Name, "Insert Table Row", new ActionProxy(TableInsertRow));
+        svc.AddMenuItem(Name, "Insert Row", new ActionProxy(TableInsertRow));
 
       if (Config.AddInsertTableMenuItem)
         svc.AddMenuItem(Name, "Insert Table", new ActionProxy(TableInsertPrompt));
@@ -128,11 +128,11 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
 
       // MODIFY TABLE
       .RegisterGlobal(
-        "InsertHTMLTable",
+        "ModifyHTMLTable",
         "Insert an HTML Table",
         HotKeyScopes.SMBrowser,
-        new HotKey(Key.DbeAlphanumeric),
-        TableInsertPrompt
+        new HotKey(Key.DbeCodeInput),
+        TableModifyPrompt
       )
 
       // INSERT ROW 
@@ -140,7 +140,7 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
         "InsertHTMLTableRow",
         "Insert an HTML Table Row",
         HotKeyScopes.SMBrowser,
-        new HotKey(),
+        new HotKey(Key.DbeDbcsChar),
         TableInsertRow
       )
 
@@ -149,7 +149,7 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
         "DeleteHTMLTableRow",
         "Delete an HTML Table Row",
         HotKeyScopes.SMBrowser,
-        new HotKey(),
+        new HotKey(Key.DbeDetermineString),
         TableDeleteRow
       );
 

@@ -38,7 +38,6 @@ namespace SuperMemoAssistant.Plugins.HtmlTables.UI
 
       InitializeComponent();
 
-
       DataContext = this;
 
     }
@@ -54,15 +53,67 @@ namespace SuperMemoAssistant.Plugins.HtmlTables.UI
     private void CreateButtonClick(object sender, RoutedEventArgs e)
     {
 
-      //Value = new HtmlTableProperty();
-      //Value.CaptionText = TableCaptionBox.Text ?? string.Empty;
+      var props = new HtmlTableProperty();
 
-      //if (CaptionAlignmentDefault.IsChecked == true)
-      //  Value.CaptionAlignment = HorizontalAlignOption.Default;
-      //else if (CaptionAlignmentDefault)
-      //Value.CaptionAlignment = 
+      // Caption Text
+      props.CaptionText = TableCaptionBox.Text ?? string.Empty;
 
+      // Caption Alignment
+      if (CaptionAlignmentDefault.IsChecked == true)
+        props.CaptionAlignment = HorizontalAlignOption.Default;
+      else if (CaptionAlignmentCenter.IsChecked == true)
+        props.CaptionAlignment = HorizontalAlignOption.Center;
+      else if (CaptionAlignmentLeft.IsChecked == true)
+        props.CaptionAlignment = HorizontalAlignOption.Left;
+      else if (CaptionAlignmentRight.IsChecked == true)
+        props.CaptionAlignment = HorizontalAlignOption.Right;
 
+      // Caption Location
+      if (CaptionLocationBottom.IsChecked == true)
+        props.CaptionLocation = VerticalAlignOption.Bottom;
+      else if (CaptionLocationTop.IsChecked == true)
+        props.CaptionLocation = VerticalAlignOption.Top;
+      else if (CaptionLocationDefault.IsChecked == true)
+        props.CaptionLocation = VerticalAlignOption.Default;
+
+      // Table alignment
+      if (TableAlignmentCenter.IsChecked == true)
+        props.TableAlignment = HorizontalAlignOption.Center;
+      else if (TableAlignmentDefault.IsChecked == true)
+        props.TableAlignment = HorizontalAlignOption.Default;
+      else if (TableAlignmentLeft.IsChecked == true)
+        props.TableAlignment = HorizontalAlignOption.Left;
+      else if (TableAlignmentRight.IsChecked == true)
+        props.TableAlignment = HorizontalAlignOption.Right;
+
+      // Border Size
+      props.BorderSize = BorderSizeBox.Text.TryParseByte(2);
+
+      // Table Rows
+      props.TableRows = TableRowsBox.Text.TryParseByte(3);
+
+      // Table Columns
+      props.TableColumns = TableColumnsBox.Text.TryParseByte(3);
+
+      // Table Width
+      props.TableWidth = TableWidthBox.Text.TryParseUshort(50);
+
+      // Table Width Measurement
+      if (WidthMeasurementPercent.IsChecked == true)
+        props.TableWidthMeasurement = MeasurementOption.Percent;
+      else if (WidthMeasurementPixel.IsChecked == true)
+        props.TableWidthMeasurement = MeasurementOption.Pixel;
+
+      // Cell Padding
+      props.CellPadding = CellPaddingBox.Text.TryParseByte(1);
+
+      // Cell Spacing
+      props.CellSpacing = CellSpacingBox.Text.TryParseByte(2);
+
+      Value = props;
+
+      Confirmed = true;
+      Close();
     }
   }
 }

@@ -35,16 +35,16 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
     [Heading("Dev Context Menu")]
 
     [Field(Name = @"Add ""Insert Table"" command to Dev Context Menu?")]
-    public bool AddInsertTableMenuItem { get; set; }
+    public bool AddInsertTableMenuItem { get; set; } = true;
 
     [Field(Name = @"Add ""Modify Table"" command to Dev Context Menu?")]
-    public bool AddModifyTableMenuItem { get; set; }
+    public bool AddModifyTableMenuItem { get; set; } = true;
 
     [Field(Name = @"Add ""Insert Row"" command to Dev Context Menu?")]
-    public bool AddInsertRowMenuItem { get; set; }
+    public bool AddInsertRowMenuItem { get; set; } = true;
 
     [Field(Name = @"Add ""Delete Row"" command to Dev Context Menu?")]
-    public bool AddDeleteRowMenuItem { get; set; }
+    public bool AddDeleteRowMenuItem { get; set; } = true;
 
     [JsonIgnore]
     public bool IsChanged { get; set; }
