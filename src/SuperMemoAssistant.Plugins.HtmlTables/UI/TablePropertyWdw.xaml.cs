@@ -1,4 +1,5 @@
 ﻿using mshtml;
+using SuperMemoAssistant.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,20 +24,29 @@ namespace SuperMemoAssistant.Plugins.HtmlTables.UI
 
     public bool Confirmed { get; set; } = false;
     public HtmlTableProperty Value { get; set; }
+    private static HtmlTablesCfg Config => Svc<HtmlTablesPlugin>.Plugin.Config;
 
-    // Values
-    public string TableCaption { get; set; } = string.Empty;
-    public string BorderSize { get; set; } = "2";
-    public string TableRows { get; set; } = "3";
-    public string TableColumns { get; set; } = "3";
-    public string TableWidth { get; set; } = "50";
-    public string CellPadding { get; set; } = "1";
-    public string CellSpacing { get; set; } = "2";
+    public string TableCaption { get; set; } = Config.TableCaption;
+    public string BorderSize { get; set; } = Config.BorderSize;
+    public string TableRows { get; set; } = Config.TableRows;
+    public string TableColumns { get; set; } = Config.TableColumns;
+    public string TableWidth { get; set; } = Config.TableWidth;
+    public string CellPadding { get; set; } = Config.CellPadding;
+    public string CellSpacing { get; set; } = Config.CellSpacing;
 
     public TablePropertyWdw(HtmlTableProperty props)
     {
 
       InitializeComponent();
+
+      // Set Table 
+      this.TableCaption = props.CaptionText;
+      this.BorderSize = props.BorderSize.ToString();
+      this.TableRows = props.TableRows.ToString();
+      this.TableColumns = props.TableColumns.ToString();
+      this.TableWidth = props.TableWidth.ToString();
+      this.CellPadding = props.CellPadding.ToString();
+      this.CellSpacing = props.CellSpacing.ToString();
 
       DataContext = this;
 
@@ -111,9 +121,17 @@ namespace SuperMemoAssistant.Plugins.HtmlTables.UI
       props.CellSpacing = CellSpacingBox.Text.TryParseByte(2);
 
       Value = props;
-
       Confirmed = true;
       Close();
+    }
+
+    private void Window_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Enter)
+        CreateButtonClick(null, null);
+
+      else if (e.Key == Key.Escape)
+        Close();
     }
   }
 }

@@ -35,10 +35,11 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
   using System.Diagnostics.CodeAnalysis;
   using System.Globalization;
   using System.Runtime.Remoting;
+  using System.Threading.Tasks;
   using System.Windows;
   using System.Windows.Input;
+  using Anotar.Serilog;
   using mshtml;
-  using SuperMemoAssistant.Plugins.DevContextMenu.Interop;
   using SuperMemoAssistant.Plugins.HtmlTables.UI;
   using SuperMemoAssistant.Services;
   using SuperMemoAssistant.Services.IO.HotKeys;
@@ -46,7 +47,6 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
   using SuperMemoAssistant.Services.Sentry;
   using SuperMemoAssistant.Services.UI.Configuration;
   using SuperMemoAssistant.Sys.IO.Devices;
-  using SuperMemoAssistant.Sys.Remoting;
 
   // ReSharper disable once UnusedMember.Global
   // ReSharper disable once ClassNeverInstantiated.Global
@@ -66,17 +66,17 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
     public override string Name => "HtmlTables";
 
     /// <inheritdoc />
-    public override bool HasSettings => false;
+    public override bool HasSettings => true;
 
-    public HtmlTablesCfg Config;
+    public HtmlTablesCfg Config { get; set; }
 
     #endregion
 
     #region Methods Impl
 
-    private void LoadConfig()
+    private async Task LoadConfig()
     {
-      Config = Svc.Configuration.Load<HtmlTablesCfg>() ?? new HtmlTablesCfg();
+      Config = await Svc.Configuration.Load<HtmlTablesCfg>().ConfigureAwait(false) ?? new HtmlTablesCfg();
     }
 
 
@@ -84,32 +84,8 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
     protected override void PluginInit()
     {
 
-      LoadConfig();
-
+      LoadConfig().Wait();
       RegisterDummyHotkeys();
-
-      IntegrateOptionalServices();
-
-    }
-
-    private void IntegrateOptionalServices()
-    {
-      
-      var svc = GetService<IDevContextMenu>();
-      if (svc.IsNull())
-        return;
-
-      if (Config.AddDeleteRowMenuItem)
-        svc.AddMenuItem(Name, "Delete Row", new ActionProxy(TableDeleteRow));
-
-      if (Config.AddInsertRowMenuItem)
-        svc.AddMenuItem(Name, "Insert Row", new ActionProxy(TableInsertRow));
-
-      if (Config.AddInsertTableMenuItem)
-        svc.AddMenuItem(Name, "Insert Table", new ActionProxy(TableInsertPrompt));
-
-      if (Config.AddModifyTableMenuItem)
-        svc.AddMenuItem(Name, "Modify Table", new ActionProxy(TableModifyPrompt));
 
     }
 
@@ -121,17 +97,17 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
       .RegisterGlobal(
         "InsertHTMLTable",
         "Insert an HTML Table",
-        HotKeyScopes.SMBrowser,
-        new HotKey(Key.DbeAlphanumeric),
+        HotKeyScope.SMBrowser,
+        new HotKey(Key.I, KeyModifiers.CtrlAltShift),
         TableInsertPrompt
       )
 
       // MODIFY TABLE
       .RegisterGlobal(
         "ModifyHTMLTable",
-        "Insert an HTML Table",
-        HotKeyScopes.SMBrowser,
-        new HotKey(Key.DbeCodeInput),
+        "Modify an HTML Table",
+        HotKeyScope.SMBrowser,
+        new HotKey(Key.M, KeyModifiers.CtrlAltShift),
         TableModifyPrompt
       )
 
@@ -139,8 +115,8 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
       .RegisterGlobal(
         "InsertHTMLTableRow",
         "Insert an HTML Table Row",
-        HotKeyScopes.SMBrowser,
-        new HotKey(Key.DbeDbcsChar),
+        HotKeyScope.SMBrowser,
+        new HotKey(Key.OemPlus, KeyModifiers.CtrlAltShift),
         TableInsertRow
       )
 
@@ -148,8 +124,8 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
       .RegisterGlobal(
         "DeleteHTMLTableRow",
         "Delete an HTML Table Row",
-        HotKeyScopes.SMBrowser,
-        new HotKey(Key.DbeDetermineString),
+        HotKeyScope.SMBrowser,
+        new HotKey(Key.OemMinus, KeyModifiers.CtrlAltShift),
         TableDeleteRow
       );
 
@@ -172,6 +148,7 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
     public void TableInsert(HtmlTableProperty tableProperties)
     {
       // call the private insert table method with a null table entry
+      LogTo.Debug("Inserting a new HTML table.");
       ProcessTable(null, tableProperties);
 
     }
@@ -188,6 +165,7 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
       // if a table has been selected then process
       if (!table.IsNull())
       {
+        LogTo.Debug("Modifying the HTML table.");
         ProcessTable(table, tableProperties);
         return true;
       }
@@ -302,7 +280,6 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
           // find the existing row the user is on and perform the deletion
           int index = row.rowIndex;
           table.deleteRow(index);
-
         }
         catch (RemotingException) { }
         catch (UnauthorizedAccessException) { }
@@ -695,22 +672,6 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
         tableFound = true;
       }
 
-    }
-
-    /// <summary>
-    /// Method to determine if the insertion point or selection is a table
-    /// </summary>
-    private bool IsParentTable()
-    {
-      // see if a table selected or insertion point inside a table
-      IHTMLTable htmlTable = GetTableElement();
-
-      // process according to table being defined
-      if (htmlTable.IsNull())
-      {
-        return false;
-      }
-      return true;
     }
 
     #endregion

@@ -1,13 +1,12 @@
-﻿using Forge.Forms.Annotations;
+﻿using Anotar.Serilog;
+using Forge.Forms;
+using Forge.Forms.Annotations;
 using Newtonsoft.Json;
 using SuperMemoAssistant.Services.UI.Configuration;
 using SuperMemoAssistant.Sys.ComponentModel;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace SuperMemoAssistant.Plugins.HtmlTables
 {
@@ -26,25 +25,44 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
     [Title("Html Tables Plugin")]
     [Heading("By Jamesb | Experimental Learning")]
 
-    [Heading("Features:")]
+    [Heading("Features")]
     [Text(@"- Easily create and modify HTML tables.
-- Create hotkey bindings for HTML table-related operations.
-- Optionally integrates with DevContextMenu.")]
+- Create hotkey bindings for HTML table-related operations.")]
 
-    [Heading("Plugin Integration Settings")]
-    [Heading("Dev Context Menu")]
+    [Heading("Support")]
+    [Text("If you would like to support my projects, check out my Patreon or buy me a coffee.")]
 
-    [Field(Name = @"Add ""Insert Table"" command to Dev Context Menu?")]
-    public bool AddInsertTableMenuItem { get; set; } = true;
+    [Action("patreon", "Patreon", Placement = Placement.Before, LinePosition = Position.Left)]
+    [Action("coffee", "Coffee", Placement = Placement.Before,  LinePosition = Position.Left)]
 
-    [Field(Name = @"Add ""Modify Table"" command to Dev Context Menu?")]
-    public bool AddModifyTableMenuItem { get; set; } = true;
+    [Heading("Links")]
+    [Action("github", "GitHub", Placement = Placement.Before, LinePosition = Position.Left)]
+    [Action("feedback", "Feedback Site", Placement = Placement.Before, LinePosition = Position.Left)]
+    [Action("blog", "Blog", Placement = Placement.Before, LinePosition = Position.Left)]
+    [Action("youtube", "YouTube", Placement = Placement.Before, LinePosition = Position.Left)]
+    [Action("twitter", "Twitter", Placement = Placement.Before, LinePosition = Position.Left)]
 
-    [Field(Name = @"Add ""Insert Row"" command to Dev Context Menu?")]
-    public bool AddInsertRowMenuItem { get; set; } = true;
+    [Heading("Default HTML Table Settings:")]
+    [Field(Name = "Default table caption")]
+    public string TableCaption { get; set; } = string.Empty;
 
-    [Field(Name = @"Add ""Delete Row"" command to Dev Context Menu?")]
-    public bool AddDeleteRowMenuItem { get; set; } = true;
+    [Field(Name = "Default table border size")]
+    public string BorderSize { get; set; } = "2";
+
+    [Field(Name = "Default number of rows")]
+    public string TableRows { get; set; } = "3";
+
+    [Field(Name = "Default number of columns")]
+    public string TableColumns { get; set; } = "3";
+
+    [Field(Name = "Default table width")]
+    public string TableWidth { get; set; } = "50";
+
+    [Field(Name = "Default cell padding")]
+    public string CellPadding { get; set; } = "1";
+
+    [Field(Name = "Default cell spacing")]
+    public string CellSpacing { get; set; } = "2";
 
     [JsonIgnore]
     public bool IsChanged { get; set; }
@@ -52,6 +70,49 @@ namespace SuperMemoAssistant.Plugins.HtmlTables
     public override string ToString()
     {
       return "Html Tables Settings";
+    }
+
+    public override void HandleAction(IActionContext actionContext)
+    {
+      
+      string patreon = "https://www.patreon.com/experimental_learning";
+      string coffee = "https://buymeacoffee.com/experilearning";
+      string github = "https://github.com/bjsi/SuperMemoAssistant.Plugins.HtmlTables";
+      string feedback = "https://feedback.experimental-learning.com/";
+      string youtube = "https://www.youtube.com/channel/UCIaS9XDdQkvIjASBfgim1Uw";
+      string twitter = "https://twitter.com/experilearning";
+      string blog = "https://www.experimental-learning.com/";
+
+      string action = actionContext.Action as string;
+      if (action == "patreon")
+        openLinkDefaultBrowser(patreon);
+      else if (action == "github")
+        openLinkDefaultBrowser(github);
+      else if (action == "coffee")
+        openLinkDefaultBrowser(coffee);
+      else if (action == "feedback")
+        openLinkDefaultBrowser(feedback);
+      else if (action == "youtube")
+        openLinkDefaultBrowser(youtube);
+      else if (action == "twitter")
+        openLinkDefaultBrowser(twitter);
+      else if (action == "blog")
+        openLinkDefaultBrowser(blog);
+      else
+        base.HandleAction(actionContext);
+    }
+
+    // Hack
+    private DateTime LastLinkOpen { get; set; } = DateTime.MinValue;
+
+    private void openLinkDefaultBrowser(string url)
+    {
+      var diffInSeconds = (DateTime.Now - LastLinkOpen).TotalSeconds;
+      if (diffInSeconds > 1)
+      {
+        LastLinkOpen = DateTime.Now;
+        Process.Start(url);
+      }
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
