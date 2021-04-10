@@ -9,7 +9,7 @@
 
 ### Manual Installation
 
-1. Check the releases tab on this GitHub repository.
+1. Go to the [latest release page](https://github.com/bjsi/SuperMemoAssistant.Plugins.HtmlTables/releases/latest) on this GitHub repository.
 2. Download the latest available version.
 3. Navigate to the development plugin folder (`C:\Users\<YOUR USER NAME>\Documents\SuperMemoAssistant\Plugins\Development`) and extract the zip folder into the directory.
 
